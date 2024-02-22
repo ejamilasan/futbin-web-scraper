@@ -5,59 +5,52 @@ from tabulate import tabulate
 
 BASE_URL = 'https://www.fut.gg/'
 
+def get_html(url):
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.content
+    except requests.RequestException as e:
+        print(f"Error fetching {url}: {e}")
+        return None
+
 def get_sbc_options():
-    scrape_url = BASE_URL + 'sbc'
-    response = requests.get(scrape_url)
-    sbc_options = set()
-
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.content, 'html.parser')
-
-        # Find all <a> tags with href attribute containing "/sbc/"
+    url = BASE_URL + 'sbc'
+    html_content = get_html(url)
+    if html_content:
+        soup = BeautifulSoup(html_content, 'html.parser')
         sbc_links = soup.find_all('a', href=lambda href: href and '/sbc/' in href)
-        
-        for link in sbc_links:
-            option = link['href'].split('/')[2].strip()
-            if option:
-                sbc_options.add(option)
+        sbc_options = {link['href'].split('/')[2].strip() for link in sbc_links}
+        return list(sbc_options)
+    return []
 
-    else:
-        print('Failed to retrieve the page. Status code:', response.status_code)
+def parse_sbc_link(link):
+    sbc_name = link.find('h2').text.strip()
+    sbc_price = link.find('div', class_='self-end').text.replace('New', '').strip()
+    sbc_expiration = link.find('span', string='Expires In').find_next_sibling('span').text.strip()
+    sbc_challenges = link.find('span', string='Challenges').find_next_sibling('span').text.strip()
+    sbc_repeatable = link.find('span', string='Repeatable').find_next_sibling('span').text.strip()
+    sbc_refresh = link.find('span', string='Refreshes In').find_next_sibling('span').text.strip()
 
-    return list(sbc_options)
+    new_element = link.find('div', class_='self-end').text.strip()
+    new_item = 'yes' if 'new' in new_element.lower() else 'no'
 
+    return [new_item, sbc_name, sbc_price, sbc_expiration, sbc_challenges, sbc_repeatable, sbc_refresh]
 
 def get_sbc(option):
-    sbc_data = []
-    scrape_url = BASE_URL + 'sbc'
-    response = requests.get(scrape_url)
-
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.content, 'html.parser')
+    url = BASE_URL + 'sbc'
+    html_content = get_html(url)
+    if html_content:
+        soup = BeautifulSoup(html_content, 'html.parser')
         sbc_links = soup.find_all('div', class_='bg-dark-gray')
-
         sbc_data = []
 
         for link in sbc_links:
             if f'/sbc/{option}' in link.find('a')['href']:
-                new_element = sbc_price = link.find('div', class_='self-end').text.strip()
-                if 'new' in new_element.lower():
-                    new_item = 'yes'
-                else:
-                    new_item = 'no'
-                sbc_name = link.find('h2').text.strip()
-                sbc_price = link.find('div', class_='self-end').text.replace('New', '').strip()
-                sbc_expiration = link.find('span', string='Expires In').find_next_sibling('span').text.strip()
-                sbc_challenges = link.find('span', string='Challenges').find_next_sibling('span').text.strip()
-                sbc_repeatable = link.find('span', string='Repeatable').find_next_sibling('span').text.strip()
-                sbc_refresh = link.find('span', string='Refreshes In').find_next_sibling('span').text.strip()
+                sbc_data.append(parse_sbc_link(link))
 
-                sbc_data.append([new_item, sbc_name, sbc_price, sbc_expiration, sbc_challenges, sbc_repeatable, sbc_refresh])
-
-    else:
-        print('Failed to retrieve the page. Status code:', response.status_code)
-
-    return sbc_data
+        return sbc_data
+    return []
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
