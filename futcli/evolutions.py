@@ -1,4 +1,5 @@
 import sys
+from datetime import datetime
 from bs4 import BeautifulSoup
 from tabulate import tabulate
 from urls import get_html
@@ -31,8 +32,17 @@ def get_evolution_items(link):
         key = item.find_next('span', class_='text-lightest-gray').text.strip()
         value = item.find_next('span', class_='text-green').text.strip()
         evolution_upgrades += f"{key}: {value}\n"
+    
+    evolution_expires_h3 = link.find('h3', string='Expires').find_next('time')
+    evolution_expires_dt_str = evolution_expires_h3['datetime']
+    evolution_expires = datetime.strptime(evolution_expires_dt_str, "%Y-%m-%dT%H:%M:%S.%f%z").strftime("%Y-%m-%d %H:%M:%S")
 
-    return [evolution_name, evolution_price, evolution_requirements, evolution_upgrades]
+    evolution_levels = link.find('h3', string='Levels').find_next('div').text.strip()
+
+    evolution_number_of_players = link.find('h3', string='# Players').find_next('div').text.strip()
+    
+
+    return [evolution_name, evolution_price, evolution_requirements, evolution_upgrades, evolution_expires, evolution_levels, evolution_number_of_players]
 
 def get_evolutions():
     """
@@ -57,6 +67,6 @@ if __name__ == "__main__":
     if category == 'evolutions':
         evolutions_data = get_evolutions()
         if evolutions_data:
-            print(tabulate(evolutions_data, headers=['Name', 'Price', 'Requirements', 'Upgrades'], tablefmt='grid'))
+            print(tabulate(evolutions_data, headers=['Name', 'Price', 'Requirements', 'Upgrades', 'Expiration', 'Levels', '# Players'], tablefmt='grid'))
         else:
             print("No Evolutions data available.")
