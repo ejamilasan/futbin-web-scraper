@@ -1,7 +1,7 @@
 import sys
+import json
 from datetime import datetime
 from bs4 import BeautifulSoup
-from tabulate import tabulate
 from urls import get_html
 
 BASE_URL = 'https://www.fut.gg/'
@@ -17,21 +17,11 @@ def get_evolution_items(link):
 
     evolution_requirements_h3 = link.find('h3', string='Requirements').find_next('ul')
     evolution_requirements_list_items = evolution_requirements_h3.find_all('li')
-    evolution_requirements = ""
-
-    for item in evolution_requirements_list_items:
-        key = item.find('span', class_='text-lightest-gray').text.strip()
-        value = item.find('span', class_='text-lighter-gray').text.strip()
-        evolution_requirements += f"{key}: {value}\n"
+    evolution_requirements = {item.find('span', class_='text-lightest-gray').text.strip(): item.find('span', class_='text-lighter-gray').text.strip() for item in evolution_requirements_list_items}
 
     evolution_upgrades_h3 = link.find('h3', string='Upgrades').find_next('ul')
     evolution_upgrades_list_items = evolution_upgrades_h3.find_all('li')
-    evolution_upgrades = ""
-
-    for item in evolution_upgrades_list_items:
-        key = item.find_next('span', class_='text-lightest-gray').text.strip()
-        value = item.find_next('span', class_='text-green').text.strip()
-        evolution_upgrades += f"{key}: {value}\n"
+    evolution_upgrades = {item.find_next('span', class_='text-lightest-gray').text.strip(): item.find_next('span', class_='text-green').text.strip() for item in evolution_upgrades_list_items}
     
     evolution_expires_h3 = link.find('h3', string='Expires').find_next('time')
     evolution_expires_dt_str = evolution_expires_h3['datetime']
@@ -39,10 +29,17 @@ def get_evolution_items(link):
 
     evolution_levels = link.find('h3', string='Levels').find_next('div').text.strip()
 
-    evolution_number_of_players = link.find('h3', string='# Players').find_next('div').text.strip()
+    evolution_players = link.find('h3', string='# Players').find_next('div').text.strip()
     
-
-    return [evolution_name, evolution_price, evolution_requirements, evolution_upgrades, evolution_expires, evolution_levels, evolution_number_of_players]
+    return {
+        'Name': evolution_name,
+        'Price': evolution_price,
+        'Requirements': evolution_requirements,
+        'Upgrades': evolution_upgrades,
+        'Expiration': evolution_expires,
+        'Levels': evolution_levels,
+        'Players': evolution_players
+    }
 
 def get_evolutions():
     """
@@ -67,6 +64,6 @@ if __name__ == "__main__":
     if category == 'evolutions':
         evolutions_data = get_evolutions()
         if evolutions_data:
-            print(tabulate(evolutions_data, headers=['Name', 'Price', 'Requirements', 'Upgrades', 'Expiration', 'Levels', '# Players'], tablefmt='grid'))
+            print(json.dumps(evolutions_data, indent=4))
         else:
             print("No Evolutions data available.")
