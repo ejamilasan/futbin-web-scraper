@@ -1,20 +1,14 @@
 import sys
-import requests
 from bs4 import BeautifulSoup
 from tabulate import tabulate
+from urls import get_html
 
 BASE_URL = 'https://www.fut.gg/'
 
-def get_html(url):
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        return response.content
-    except requests.RequestException as e:
-        print(f"Error fetching {url}: {e}")
-        return None
-
 def get_sbc_options():
+    """
+    Fetches SBC options; ie. players, upgrades, icons, etc.
+    """
     url = BASE_URL + 'sbc'
     html_content = get_html(url)
     if html_content:
@@ -24,7 +18,10 @@ def get_sbc_options():
         return list(sbc_options)
     return []
 
-def parse_sbc_link(link):
+def get_sbc_items(link):
+    """
+    Parses HTML to get and SBC item's name, price, etc.
+    """
     sbc_name = link.find('h2').text.strip()
     sbc_price = link.find('div', class_='self-end').text.replace('New', '').strip()
     sbc_expiration = link.find('span', string='Expires In').find_next_sibling('span').text.strip()
@@ -38,6 +35,9 @@ def parse_sbc_link(link):
     return [new_item, sbc_name, sbc_price, sbc_expiration, sbc_challenges, sbc_repeatable, sbc_refresh]
 
 def get_sbc(option):
+    """
+    Fetches SBC items from the given Option
+    """
     url = BASE_URL + 'sbc'
     html_content = get_html(url)
     if html_content:
@@ -47,7 +47,7 @@ def get_sbc(option):
 
         for link in sbc_links:
             if f'/sbc/{option}' in link.find('a')['href']:
-                sbc_data.append(parse_sbc_link(link))
+                sbc_data.append(get_sbc_items(link))
 
         return sbc_data
     return []
