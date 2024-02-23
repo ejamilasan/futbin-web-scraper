@@ -57,13 +57,3 @@ def get_evolutions():
 
         return evolutions_data
     return []
-
-if __name__ == "__main__":
-    category = sys.argv[1].lower()
-
-    if category == 'evolutions':
-        evolutions_data = get_evolutions()
-        if evolutions_data:
-            print(json.dumps(evolutions_data, indent=4))
-        else:
-            print("No Evolutions data available.")
