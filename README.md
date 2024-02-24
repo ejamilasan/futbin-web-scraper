@@ -1,1 +1,1 @@
-# futbin-web-scraper
+# futcli
