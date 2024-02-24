@@ -10,7 +10,7 @@ The `futcli` is a Python-based tool designed to provide users with quick access 
     ![sbc-players-output.png](./docs/sbc-players-output.png)
 * **Query Evolutions Content**: Retrieve Evolutions items including name, price, requirements, upgrades, expiration, levels, and the number of players involved.
     ![evolutions-output.png](./docs/evolutions-output.png)
-* **JSON or Table Outputs**: Display fetched data in either JSON format or as formatted tables for easy readability and/or consumability.
+* **JSON or Table Formats**: Display data in either JSON or table formats for easy readability and/or consumability.
     ```bash
     ➜  ~ futcli -o json sbc.challenges
     [
@@ -75,12 +75,12 @@ args:
 
 ## Dependencies
 `futcli` relies on the following Python packages:
-* **requests**: For making HTTP requests and fetching HTML content from URLs.
+* **requests**: For making HTTP requests and fetching HTML content from https://www.fut.gg
 * **beautifulsoup4**: For parsing HTML content and extracting data from web pages.
 * **tabulate**: For formatting data into visually appealing tables in the terminal.
 
 ## Contributing
-Contributions to `futcli` are welcome! If you encounter any bugs, issues, or have suggestions for improvements, please feel free to open an issue or submit a pull request.
+Contributions to `futcli` are welcome! If you encounter any bugs, issues, or have suggestions for improvements, please feel free to open an [issue](https://github.com/ejamilasan/futcli/issues) or submit a [pull request](https://github.com/ejamilasan/futcli/pulls).
 
 ## License
 `futcli` is licensed under the GNU General Public License v3.0.
