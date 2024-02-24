@@ -3,6 +3,7 @@
 The `futcli` is a Python-based tool designed to provide users with quick access to FC Ulimate Team (FUT) contents such as SBCs and Evolutions.
 
 ![pre-commit](https://github.com/ejamilasan/futcli/actions/workflows/pre-commit.yml/badge.svg)
+![pypi version](https://badge.fury.io/py/futcli.svg)
 
 ## Features
 * **Query SBC Content**: Retrieve SBC items: including name, price, expiration, challenges, and repeatable status.
