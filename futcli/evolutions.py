@@ -4,11 +4,12 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 from urls import get_html
 
-BASE_URL = 'https://www.fut.gg/'
+url = 'https://www.fut.gg/evolutions'
+htmlContent = get_html(url)
 
 def get_evolution_item_properties(link):
     """
-    Parses HTML to get the Evolution item's properties.
+    Parse HTML to get the Evolution item's properties.
     """
     evolution_name = link.find('h2').text.strip()
 
@@ -45,15 +46,9 @@ def get_evolution_items():
     """
     Fetches Evolution items.
     """
-    url = BASE_URL + 'evolutions'
-    html_content = get_html(url)
-    if html_content:
-        soup = BeautifulSoup(html_content, 'html.parser')
-        evolutions_links=soup.find_all('a', class_="rounded")
-        evolutions_data = []
-
-        for link in evolutions_links:
-            evolutions_data.append(get_evolution_item_properties(link))
-
+    if htmlContent:
+        soup = BeautifulSoup(htmlContent, 'html.parser')
+        evolution_links = soup.find_all('a', class_="rounded")
+        evolutions_data = [get_evolution_item_properties(link) for link in evolution_links]
         return evolutions_data
     return []

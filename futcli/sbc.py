@@ -7,14 +7,7 @@ scraperUrl = 'https://www.fut.gg/sbc'
 htmlContent = get_html(scraperUrl)
 
 def get_sbc_types():
-    """
-    Fetches the available SBC (Squad Building Challenges) types such as 
-    players, upgrades, icons, etc.
-    
-    Returns:
-        list: A list of SBC types.
-    """
-
+    """Extract SBC types from HTML content."""
     if htmlContent:
         soup = BeautifulSoup(htmlContent, 'html.parser')
         sbc_links = soup.find_all('a', href=lambda href: href and '/sbc/' in href)
@@ -24,17 +17,7 @@ def get_sbc_types():
     return []
 
 def get_sbc_item_properties(link):
-    """
-    Extracts properties of an SBC (Squad Building Challenge) item from HTML.
-
-    Args:
-        link (BeautifulSoup Tag): A BeautifulSoup Tag representing an SBC item.
-
-    Returns:
-        dict: A dictionary containing properties of the SBC item including its 
-        name, whether it's new, price, expiration, challenges, repeatable status, and refresh time.
-    """
-
+    """Extract properties of an SBC item from HTML."""
     sbc_name = link.find('h2').text.strip()
     new_element = link.find('div', class_='self-end').text.strip()
     new_item = 'yes' if 'new' in new_element.lower() else 'no'
@@ -55,14 +38,7 @@ def get_sbc_item_properties(link):
     }
 
 def get_sbc_items():
-    """
-    Fetches data for various SBC (Squad Building Challenge) items including their properties.
-
-    Returns:
-        dict: A dictionary where keys represent the types and values contain lists of 
-        SBC items with their respective properties.
-    """
-
+    """Extract SBC items and their properties."""
     if htmlContent:
         soup = BeautifulSoup(htmlContent, 'html.parser')
         sbc_links = soup.find_all('div', class_='bg-dark-gray')
