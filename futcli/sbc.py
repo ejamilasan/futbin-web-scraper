@@ -1,7 +1,7 @@
 import json
 import sys
 from bs4 import BeautifulSoup
-from urls import get_html
+from .urls import get_html
 
 scraperUrl = 'https://www.fut.gg/sbc'
 htmlContent = get_html(scraperUrl)
