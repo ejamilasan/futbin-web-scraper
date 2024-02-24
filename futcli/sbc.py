@@ -6,13 +6,13 @@ from urls import get_html
 scraperUrl = 'https://www.fut.gg/sbc'
 htmlContent = get_html(scraperUrl)
 
-def get_sbc_catalog():
+def get_sbc_types():
     """
-    Fetches the available SBC (Squad Building Challenges) catalog options such as 
+    Fetches the available SBC (Squad Building Challenges) types such as 
     players, upgrades, icons, etc.
     
     Returns:
-        list: A list of SBC catalog options.
+        list: A list of SBC types.
     """
 
     if htmlContent:
@@ -23,7 +23,7 @@ def get_sbc_catalog():
         return sbc_options_list
     return []
 
-def get_sbc_items(link):
+def get_sbc_item_properties(link):
     """
     Extracts properties of an SBC (Squad Building Challenge) item from HTML.
 
@@ -54,12 +54,12 @@ def get_sbc_items(link):
         "Refreshes": sbc_refresh
     }
 
-def get_sbc_data():
+def get_sbc_items():
     """
     Fetches data for various SBC (Squad Building Challenge) items including their properties.
 
     Returns:
-        dict: A dictionary where keys represent the SBC catalog options and values contain lists of 
+        dict: A dictionary where keys represent the types and values contain lists of 
         SBC items with their respective properties.
     """
 
@@ -69,9 +69,9 @@ def get_sbc_data():
         sbc_data = {}
 
         for link in sbc_links:
-            for catalog in get_sbc_catalog():
-                if f'/sbc/{catalog}' in link.find('a')['href']:
-                    sbc_data.setdefault(catalog, []).append(get_sbc_items(link))
+            for sbc_type in get_sbc_types():
+                if f'/sbc/{sbc_type}' in link.find('a')['href']:
+                    sbc_data.setdefault(sbc_type, []).append(get_sbc_item_properties(link))
 
         return sbc_data
     return {}

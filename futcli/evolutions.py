@@ -6,7 +6,7 @@ from urls import get_html
 
 BASE_URL = 'https://www.fut.gg/'
 
-def get_evolution_items(link):
+def get_evolution_item_properties(link):
     """
     Parses HTML to get the Evolution item's properties.
     """
@@ -41,7 +41,7 @@ def get_evolution_items(link):
         'Players': evolution_players
     }
 
-def get_evolutions():
+def get_evolution_items():
     """
     Fetches Evolution items.
     """
@@ -53,7 +53,7 @@ def get_evolutions():
         evolutions_data = []
 
         for link in evolutions_links:
-            evolutions_data.append(get_evolution_items(link))
+            evolutions_data.append(get_evolution_item_properties(link))
 
         return evolutions_data
     return []
