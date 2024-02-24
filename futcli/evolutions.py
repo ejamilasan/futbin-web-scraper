@@ -2,7 +2,7 @@ import sys
 import json
 from datetime import datetime
 from bs4 import BeautifulSoup
-from urls import get_html
+from .urls import get_html
 
 url = 'https://www.fut.gg/evolutions'
 htmlContent = get_html(url)

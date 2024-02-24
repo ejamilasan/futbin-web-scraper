@@ -2,8 +2,8 @@ import sys
 import json
 import argparse
 from tabulate import tabulate
-from sbc import get_sbc_types, get_sbc_item_properties, get_sbc_items
-from evolutions import get_evolution_item_properties, get_evolution_items
+from .sbc import get_sbc_types, get_sbc_item_properties, get_sbc_items
+from .evolutions import get_evolution_item_properties, get_evolution_items
 
 def format_output(data, output_format):
     """Format the output to either json or table."""
