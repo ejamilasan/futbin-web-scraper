@@ -7,9 +7,9 @@ The `futcli` is a Python-based tool designed to provide users with quick access 
 
 ## Features
 * **Query SBC Content**: Retrieve SBC items: including name, price, expiration, challenges, and repeatable status.
-![sbc-players-output](./docs/sbc-players-output.png)
-* **Query Evolutions Content**: Retrieve Evolutions items including name, price, requirements, upgrades, expiration, levels, and the number of players involved
-![evolutions-output](./docs/evolutions-output.png)
+    ![sbc-players-output.png](./docs/sbc-players-output.png)
+* **Query Evolutions Content**: Retrieve Evolutions items including name, price, requirements, upgrades, expiration, levels, and the number of players involved.
+    ![evolutions-output.png](./docs/evolutions-output.png)
 * **JSON or Table Outputs**: Display fetched data in either JSON format or as formatted tables for easy readability and/or consumability.
     ```bash
     ➜  ~ futcli -o json sbc.challenges
