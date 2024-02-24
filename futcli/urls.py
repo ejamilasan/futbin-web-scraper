@@ -1,5 +1,6 @@
 import requests
 
+
 def get_html(url):
     """
     Fetches HTML content from the given URL.
