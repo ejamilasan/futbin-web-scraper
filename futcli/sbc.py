@@ -3,25 +3,38 @@ import sys
 from bs4 import BeautifulSoup
 from urls import get_html
 
-BASE_URL = 'https://www.fut.gg/'
+scraperUrl = 'https://www.fut.gg/sbc'
+htmlContent = get_html(scraperUrl)
 
-def get_sbc_options():
+def get_sbc_catalog():
     """
-    Fetches SBC options; ie. players, upgrades, icons, etc.
+    Fetches the available SBC (Squad Building Challenges) catalog options such as 
+    players, upgrades, icons, etc.
+    
+    Returns:
+        list: A list of SBC catalog options.
     """
-    url = BASE_URL + 'sbc'
-    html_content = get_html(url)
-    if html_content:
-        soup = BeautifulSoup(html_content, 'html.parser')
+
+    if htmlContent:
+        soup = BeautifulSoup(htmlContent, 'html.parser')
         sbc_links = soup.find_all('a', href=lambda href: href and '/sbc/' in href)
         sbc_options = {link['href'].split('/')[2].strip() for link in sbc_links}
-        return list(sbc_options)
+        sbc_options_list = [option for option in sbc_options if option]
+        return sbc_options_list
     return []
 
 def get_sbc_items(link):
     """
-    Parses HTML to get and SBC item's name, price, etc.
+    Extracts properties of an SBC (Squad Building Challenge) item from HTML.
+
+    Args:
+        link (BeautifulSoup Tag): A BeautifulSoup Tag representing an SBC item.
+
+    Returns:
+        dict: A dictionary containing properties of the SBC item including its 
+        name, whether it's new, price, expiration, challenges, repeatable status, and refresh time.
     """
+
     sbc_name = link.find('h2').text.strip()
     new_element = link.find('div', class_='self-end').text.strip()
     new_item = 'yes' if 'new' in new_element.lower() else 'no'
@@ -41,20 +54,24 @@ def get_sbc_items(link):
         "Refreshes": sbc_refresh
     }
 
-def get_sbc(option):
+def get_sbc_data():
     """
-    Fetches SBC items from the given Option
+    Fetches data for various SBC (Squad Building Challenge) items including their properties.
+
+    Returns:
+        dict: A dictionary where keys represent the SBC catalog options and values contain lists of 
+        SBC items with their respective properties.
     """
-    url = BASE_URL + 'sbc'
-    html_content = get_html(url)
-    if html_content:
-        soup = BeautifulSoup(html_content, 'html.parser')
+
+    if htmlContent:
+        soup = BeautifulSoup(htmlContent, 'html.parser')
         sbc_links = soup.find_all('div', class_='bg-dark-gray')
-        sbc_data = []
+        sbc_data = {}
 
         for link in sbc_links:
-            if f'/sbc/{option}' in link.find('a')['href']:
-                sbc_data.append(get_sbc_items(link))
+            for catalog in get_sbc_catalog():
+                if f'/sbc/{catalog}' in link.find('a')['href']:
+                    sbc_data.setdefault(catalog, []).append(get_sbc_items(link))
 
         return sbc_data
-    return []
+    return {}
