@@ -56,7 +56,17 @@ def futcli():
             if args.output == 'json':
                 print(json.dumps(evolutions_data, indent=4))
             else:
-                print(tabulate(evolutions_data, headers='keys', tablefmt='grid'))
+                tabulated_data = []
+                for item in evolutions_data:
+                    tabulated_item = {}
+                    for key, value in item.items():
+                        if isinstance(value, dict):
+                            tabulated_item[key] = json.dumps(value, indent=4)
+                        else:
+                            tabulated_item[key] = value
+                    tabulated_data.append(tabulated_item)
+
+                print(tabulate(tabulated_data, headers='keys', tablefmt='grid'))
 
 if __name__ == "__main__":
     futcli()
