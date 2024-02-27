@@ -1,10 +1,16 @@
 import argparse
 import json
 
+import pkg_resources
 from tabulate import tabulate
 
 from .evolutions import get_evolution_items
 from .sbc import get_sbc_items, get_sbc_types
+
+try:
+    version = pkg_resources.require("futcli")[0].version
+except pkg_resources.DistributionNotFound:
+    version = "unknown"
 
 
 def format_output(data, output_format):
@@ -51,6 +57,12 @@ def futcli():
         choices=["table", "json"],
         default="table",
         help="Choose the output format (table or json).",
+    )
+
+    parser.add_argument(
+        "--version",
+        action="version",
+        version="%(prog)s {version}".format(version=version),
     )
 
     subparsers = parser.add_subparsers(
