@@ -5,11 +5,11 @@ with open("README.md", "r", encoding="utf-8") as readme_file:
 
 setup(
     name="futcli",
-    version="0.1.1",
+    version="0.1.2",
     description="A command-line interface tool for fetching FC Ultimate Team data (futgg scraper)",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    author="Edwin V. Amilasan Jr.",
+    author="Edwin Amilasan Jr.",
     author_email="ejamilasan@gmail.com",
     url="https://github.com/ejamilasan/futcli",
     packages=find_packages(),
