@@ -54,21 +54,22 @@ pip install futcli
 For more information about available options and usage, you can use the `-h` or `--help`:
 ```bash
 ➜  ~ futcli -h
-usage: futcli [-h] [-o {table,json}] [sbc.{options}, evolutions] ...
+usage: futcli [-h] [-o {table,json}] [--version] [sbc.{options}, evolutions] ...
 
 options:
--h, --help            show this help message and exit
--o {table,json}, --output {table,json}
+  -h, --help            show this help message and exit
+  -o {table,json}, --output {table,json}
                         Choose the output format (table or json).
+  --version             show program's version number and exit
 
 args:
-[sbc.{options}, evolutions]
-    sbc.foundations     Outputs list of SBC foundations
-    sbc.challenges      Outputs list of SBC challenges
-    sbc.players         Outputs list of SBC players
-    sbc.exchanges       Outputs list of SBC exchanges
-    sbc.upgrades        Outputs list of SBC upgrades
+  [sbc.{options}, evolutions]
     sbc.icons           Outputs list of SBC icons
+    sbc.foundations     Outputs list of SBC foundations
+    sbc.exchanges       Outputs list of SBC exchanges
+    sbc.players         Outputs list of SBC players
+    sbc.challenges      Outputs list of SBC challenges
+    sbc.upgrades        Outputs list of SBC upgrades
     sbc                 Outputs list of all SBC types
     evolutions          Outputs list of all active Evolutions
 ```
